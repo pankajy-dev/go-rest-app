@@ -19,16 +19,16 @@ func (e Event) Save() error {
 	//later store it in DB
 
 	query := `
-	INSERT INTO events (name, description, location, dataTime, user_id) 
+	INSERT INTO event (name, description, location, dateTime, user_id) 
 	values (?, ?, ?, ?, ?)
 	`
 	// Prepares the query to be executed
 	stmt, err := db.DB.Prepare(query)
-	defer stmt.Close()
 	if err != nil {
 		panic("Cannot insert record in DB.")
 		return err
 	}
+	defer stmt.Close()
 	// Pass the arguments for each '?'
 	// We use exec when we change the data
 	result, err := stmt.Exec(e.Name, e.Description, e.Location, e.DateTime, e.UserId)
@@ -45,7 +45,7 @@ func (e Event) Save() error {
 }
 
 func GetAllEvents() ([]Event, error) {
-	query := "SELECT * FROM events"
+	query := "SELECT * FROM event"
 
 	// Queryb is used when we do select
 	rows, err := db.DB.Query(query)

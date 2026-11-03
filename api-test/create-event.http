@@ -1,0 +1,11 @@
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "name": "Gym class",
+    "description": "My first gym class",
+    "location": "Malleshwaram",
+    "dataTime": "2026-11-04T12:08:00+5:30",
+    "userId": 1
+
+}
