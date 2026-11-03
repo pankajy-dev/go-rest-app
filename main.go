@@ -5,10 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pankajy-dev/go-rest-app/db"
 	"github.com/pankajy-dev/go-rest-app/models"
 )
 
 func main() {
+	db.InitDb()
 	server := gin.Default()
 
 	server.GET("/events", getEvents)
@@ -36,9 +38,6 @@ func createEvent(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Cannot process request"})
 		return
 	}
-
-	event.Id = 1
-	event.UserId = 1
 
 	event.Save()
 

@@ -2,10 +2,12 @@ package models
 
 import (
 	"time"
+
+	"github.com/pankajy-dev/go-rest-app/db"
 )
 
 type Event struct {
-	Id          int
+	Id          int64
 	Name        string    `binding:required`
 	Description string    `binding:required`
 	Location    string    `binding:required`
@@ -13,13 +15,59 @@ type Event struct {
 	UserId      int
 }
 
-var events []Event
-
-func (e Event) Save() {
+func (e Event) Save() error {
 	//later store it in DB
-	events = append(events, e)
+
+	query := `
+	INSERT INTO events (name, description, location, dataTime, user_id) 
+	values (?, ?, ?, ?, ?)
+	`
+	// Prepares the query to be executed
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+	if err != nil {
+		panic("Cannot insert record in DB.")
+		return err
+	}
+	// Pass the arguments for each '?'
+	// We use exec when we change the data
+	result, err := stmt.Exec(e.Name, e.Description, e.Location, e.DateTime, e.UserId)
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	e.Id = id
+	return err
 }
 
-func GetAllEvents() []Event {
-	return events
+func GetAllEvents() ([]Event, error) {
+	query := "SELECT * FROM events"
+
+	// Queryb is used when we do select
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	var events []Event
+
+	for rows.Next() {
+		var event Event
+		// This works like scan of fmt, all the columns need to be specified in same order in which they exist in DB
+		err := rows.Scan(&event.Id, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserId)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+	}
+
+	return events, nil
 }
