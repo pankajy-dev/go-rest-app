@@ -14,7 +14,8 @@ func InitDb() {
 	// Open expects two params:
 	// 1. driver name in our case it is : sqlite3
 	// 2. datasource name, if it doesn't exist then it will be auto created
-	DB, err := sql.Open("sqlite3", "api.db")
+	var err error
+	DB, err = sql.Open("sqlite3", "api.db")
 
 	if err != nil {
 		panic("Error during Database object creation.")
@@ -29,12 +30,12 @@ func InitDb() {
 func createTables() {
 	createEventsTable := `
 		CREATE TABLE IF NOT EXISTS event(
-			id INT PRIMARY KEY AUTOINCREMENT,
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
 			description TEXT NOT NULL,
 			location TEXT NOT NULL,
 			dateTime DATETIME NOT NULL,
-			user_id INT NOT NULL
+			user_id INTEGER NOT NULL
 		)
 	`
 

@@ -21,7 +21,10 @@ func main() {
 
 // getEvent handler
 func getEvents(context *gin.Context) {
-	events := models.GetAllEvents()
+	events, err := models.GetAllEvents()
+	if err != nil {
+		panic(err)
+	}
 	// context.JSON(http.StatusOK, gin.H{"message":"Hello"})
 	context.JSON(http.StatusOK, events)
 }
