@@ -93,11 +93,21 @@ func GetEventId(id int64) (*Event, error) {
 func (event Event) UpdateEvent() error {
 	query := `
 		UPDATE event 
-		SET name = ?, description = ?, location = ?, dateTime = ?
+		SET name = ?, description = ?, location = ?, dateTime = ?, user_id = ?
 		WHERE id = ?
 	`
 
-	_, err := db.DB.Exec(query, event.Name, event.Description, event.Location, event.DateTime, event.UserId)
+	_, err := db.DB.Exec(query, event.Name, event.Description, event.Location, event.DateTime, event.UserId, event.Id)
 	return err
 
+}
+
+func (event Event) DeleteEvent() error {
+	query := `
+		DELETE FROM event
+		WHERE id = ?
+	`
+
+	_, err := db.DB.Exec(query, event.Id)
+	return err
 }
