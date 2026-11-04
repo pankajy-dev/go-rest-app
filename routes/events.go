@@ -35,6 +35,12 @@ func getEvents(context *gin.Context) {
 // createEvent handler
 func createEvent(ctx *gin.Context) {
 
+	auth := ctx.Request.Header.Get("Authorization")
+
+	if auth == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "No token provided."})
+	}
+
 	var event models.Event
 
 	// event will be extracted from the request and fills the pointer just like fmt.Scan
