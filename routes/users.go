@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pankajy-dev/go-rest-app/models"
+	"github.com/pankajy-dev/go-rest-app/utils"
 )
 
 func signup(ctx *gin.Context) {
@@ -40,6 +41,12 @@ func login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Authenticated"})
+	jwtToken, err := utils.GenerateToken(user.Email, user.Id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "JWT token creation errored."})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Authenticated", "token": jwtToken})
 
 }
