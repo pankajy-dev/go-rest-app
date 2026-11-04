@@ -49,3 +49,34 @@ func createEvent(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "event": event})
 }
+
+func updateEvent(ctx *gin.Context) {
+	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse."})
+		return
+	}
+
+	_, err = models.GetEventId(eventId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch."})
+		return
+	}
+
+	var updatedEvent models.Event
+
+	err = ctx.ShouldBindJSON(&updatedEvent)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request."})
+		return
+	}
+
+	updatedEvent.Id = eventId
+	err = updatedEvent.UpdateEvent()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not update."})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "Event updated successfully"})
+}

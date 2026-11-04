@@ -1,0 +1,11 @@
+PUT http://localhost:8080/events/1
+Content-Type: application/json
+
+{
+    "name": "Music class",
+    "description": "My first music class",
+    "location": "Malleshwaram",
+    "dataTime": "2026-11-04T08:08:00+5:30",
+    "userId": 1
+
+}
