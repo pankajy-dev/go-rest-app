@@ -42,8 +42,7 @@ func (user User) ValidateCredentials() bool {
 	if err != nil {
 		return false
 	}
-	if utils.Authenticated(retrievedPass, user.Password) {
-		return true
-	}
-	return false
+	isValid := utils.Authenticated(retrievedPass, user.Password)
+
+	return isValid
 }
