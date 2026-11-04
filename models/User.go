@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/pankajy-dev/go-rest-app/api-test/utils"
 	"github.com/pankajy-dev/go-rest-app/db"
+	"github.com/pankajy-dev/go-rest-app/utils"
 )
 
 type User struct {
@@ -29,4 +29,21 @@ func (user User) Save() error {
 		return err
 	}
 	return err
+}
+
+func (user User) validateCredentials() error {
+
+	query := "SELECT password FROM user WHERE email = ?"
+
+	row := db.DB.QueryRow(query, user.Email)
+
+	var retrievedPass string
+	err := row.Scan(&retrievedPass)
+	if err != nil {
+		return err
+	}
+	if !utils.VerifyPassword(retrievedPass, user.Password) {
+		return err
+	}
+	return nil
 }

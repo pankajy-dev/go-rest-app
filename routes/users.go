@@ -26,3 +26,13 @@ func signup(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "user": usr})
 }
+
+func login(ctx *gin.Context) {
+	var user models.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Bad request."})
+		return
+	}
+
+}
