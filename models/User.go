@@ -31,7 +31,7 @@ func (user User) Save() error {
 	return err
 }
 
-func (user User) validateCredentials() error {
+func (user User) ValidateCredentials() bool {
 
 	query := "SELECT password FROM user WHERE email = ?"
 
@@ -40,10 +40,10 @@ func (user User) validateCredentials() error {
 	var retrievedPass string
 	err := row.Scan(&retrievedPass)
 	if err != nil {
-		return err
+		return false
 	}
-	if !utils.VerifyPassword(retrievedPass, user.Password) {
-		return err
+	if utils.Authenticated(retrievedPass, user.Password) {
+		return true
 	}
-	return nil
+	return false
 }

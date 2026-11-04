@@ -35,4 +35,11 @@ func login(ctx *gin.Context) {
 		return
 	}
 
+	if !user.ValidateCredentials() {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthenticated"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Authenticated"})
+
 }
