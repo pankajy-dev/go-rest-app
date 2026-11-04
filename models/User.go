@@ -1,6 +1,9 @@
 package models
 
-import "github.com/pankajy-dev/go-rest-app/db"
+import (
+	"github.com/pankajy-dev/go-rest-app/api-test/utils"
+	"github.com/pankajy-dev/go-rest-app/db"
+)
 
 type User struct {
 	Id       int64
@@ -10,7 +13,13 @@ type User struct {
 
 func (user User) Save() error {
 	query := "INSERT INTO user (email, password) values (?,?)"
-	result, err := db.DB.Exec(query, user.Email, user.Password)
+
+	hashedPass, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+
+	result, err := db.DB.Exec(query, user.Email, hashedPass)
 	if err != nil {
 		return err
 	}
