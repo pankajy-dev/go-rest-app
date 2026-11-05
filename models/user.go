@@ -11,7 +11,7 @@ type User struct {
 	Password string `binding:"required"`
 }
 
-func (user User) Save() error {
+func (user *User) Save() error {
 	query := "INSERT INTO user (email, password) values (?,?)"
 
 	hashedPass, err := utils.HashPassword(user.Password)
