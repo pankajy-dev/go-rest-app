@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func Authenticate(ctx *gin.Context) {
 
 	userId, err := utils.VerifyToken(token)
 	if err != nil {
+		fmt.Printf("User not authorized %v\n", userId)
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authorized"})
 		return
 	}

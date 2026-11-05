@@ -108,9 +108,17 @@ func deleteEvent(ctx *gin.Context) {
 		return
 	}
 
+	userId := ctx.GetInt64("userId")
+
 	event, err := models.GetEventId(eventId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch."})
+		return
+	}
+
+	if event.UserId != userId {
+		fmt.Printf("User: %v not authorized for this operation\n", userId)
+		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "User not authorized."})
 		return
 	}
 
