@@ -1,8 +1,8 @@
-package routes
+package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pankajy-dev/go-rest-app/middlewares"
+	"github.com/pankajy-dev/go-rest-app/internal/middleware"
 )
 
 func RegisterRoutes(server *gin.Engine) {
@@ -10,12 +10,12 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/events/:id", getEvent) // events/1
 
 	// Either add middleware individually or as a group
-	//server.POST("/events", middlewares.Authenticate, createEvent)
+	//server.POST("/events", middleware.Authenticate, createEvent)
 
 	authenticated := server.Group("/")
-	authenticated.Use(middlewares.Authenticate)
+	authenticated.Use(middleware.Authenticate)
 
-	authenticated.POST("/events", middlewares.Authenticate, createEvent)
+	authenticated.POST("/events", middleware.Authenticate, createEvent)
 	authenticated.PUT("/events/:id", updateEvent)
 	authenticated.DELETE("/events/:id", deleteEvent)
 	authenticated.POST("/events/:id/register", registerForEvent)

@@ -1,11 +1,11 @@
-package middlewares
+package middleware
 
 import (
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pankajy-dev/go-rest-app/utils"
+	"github.com/pankajy-dev/go-rest-app/internal/utils"
 )
 
 func Authenticate(ctx *gin.Context) {

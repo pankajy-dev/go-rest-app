@@ -3,6 +3,8 @@ package db
 import (
 	"database/sql"
 
+	"github.com/pankajy-dev/go-rest-app/internal/config"
+
 	// _ tells that this import is needed in final build, don't auto remove it, the below dependecy is needed for database/sql
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -15,7 +17,7 @@ func InitDb() {
 	// 1. driver name in our case it is : sqlite3
 	// 2. datasource name, if it doesn't exist then it will be auto created
 	var err error
-	DB, err = sql.Open("sqlite3", "api.db")
+	DB, err = sql.Open("sqlite3", config.DBPath())
 
 	if err != nil {
 		panic("Error during Database object creation.")

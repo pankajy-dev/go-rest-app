@@ -1,12 +1,13 @@
-package routes
+package handlers
 
 import (
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pankajy-dev/go-rest-app/models"
-	"github.com/pankajy-dev/go-rest-app/utils"
+	"github.com/pankajy-dev/go-rest-app/internal/models"
+	"github.com/pankajy-dev/go-rest-app/internal/repository"
+	"github.com/pankajy-dev/go-rest-app/internal/utils"
 )
 
 func signup(ctx *gin.Context) {
@@ -20,7 +21,7 @@ func signup(ctx *gin.Context) {
 		return
 	}
 
-	err = usr.Save()
+	err = repository.SaveUser(&usr)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "User cannot be saved."})
@@ -39,7 +40,7 @@ func login(ctx *gin.Context) {
 		return
 	}
 
-	if !user.ValidateCredentials() {
+	if !repository.ValidateCredentials(&user) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthenticated"})
 		return
 	}

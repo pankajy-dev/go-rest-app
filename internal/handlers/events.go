@@ -1,4 +1,4 @@
-package routes
+package handlers
 
 import (
 	"log"
@@ -6,7 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pankajy-dev/go-rest-app/models"
+	"github.com/pankajy-dev/go-rest-app/internal/models"
+	"github.com/pankajy-dev/go-rest-app/internal/repository"
 )
 
 func getEvent(ctx *gin.Context) {
@@ -15,7 +16,7 @@ func getEvent(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Couldn't get eventId"})
 		return
 	}
-	event, err := models.GetEventId(eventId)
+	event, err := repository.GetEventId(eventId)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "No event id found"})
 		return
@@ -25,7 +26,7 @@ func getEvent(ctx *gin.Context) {
 
 // getEvent handler
 func getEvents(context *gin.Context) {
-	events, err := models.GetAllEvents()
+	events, err := repository.GetAllEvents()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Not able to get the events."})
 		return
@@ -56,7 +57,7 @@ func createEvent(ctx *gin.Context) {
 
 	event.UserId = int64(userId)
 
-	err = event.Save()
+	err = repository.SaveEvent(&event)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Could not create the event."})
 		return
@@ -73,7 +74,7 @@ func updateEvent(ctx *gin.Context) {
 		return
 	}
 
-	event, err := models.GetEventId(eventId)
+	event, err := repository.GetEventId(eventId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch."})
@@ -98,7 +99,7 @@ func updateEvent(ctx *gin.Context) {
 	}
 
 	updatedEvent.Id = eventId
-	err = updatedEvent.UpdateEvent()
+	err = repository.UpdateEvent(updatedEvent)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not update."})
@@ -117,7 +118,7 @@ func deleteEvent(ctx *gin.Context) {
 
 	userId := ctx.GetInt64("userId")
 
-	event, err := models.GetEventId(eventId)
+	event, err := repository.GetEventId(eventId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch."})
@@ -130,7 +131,7 @@ func deleteEvent(ctx *gin.Context) {
 		return
 	}
 
-	err = event.DeleteEvent()
+	err = repository.DeleteEvent(*event)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Error during record deletion."})

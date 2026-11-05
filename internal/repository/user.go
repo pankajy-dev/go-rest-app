@@ -1,17 +1,12 @@
-package models
+package repository
 
 import (
-	"github.com/pankajy-dev/go-rest-app/db"
-	"github.com/pankajy-dev/go-rest-app/utils"
+	"github.com/pankajy-dev/go-rest-app/internal/db"
+	"github.com/pankajy-dev/go-rest-app/internal/models"
+	"github.com/pankajy-dev/go-rest-app/internal/utils"
 )
 
-type User struct {
-	Id       int64
-	Email    string `binding:"required"`
-	Password string `binding:"required"`
-}
-
-func (user *User) Save() error {
+func SaveUser(user *models.User) error {
 	query := "INSERT INTO user (email, password) values (?,?)"
 
 	hashedPass, err := utils.HashPassword(user.Password)
@@ -31,8 +26,7 @@ func (user *User) Save() error {
 	return err
 }
 
-func (user *User) ValidateCredentials() bool {
-
+func ValidateCredentials(user *models.User) bool {
 	query := "SELECT id, password FROM user WHERE email = ?"
 
 	row := db.DB.QueryRow(query, user.Email)
@@ -42,7 +36,6 @@ func (user *User) ValidateCredentials() bool {
 	if err != nil {
 		return false
 	}
-	isValid := utils.Authenticated(retrievedPass, user.Password)
 
-	return isValid
+	return utils.Authenticated(retrievedPass, user.Password)
 }

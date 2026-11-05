@@ -1,4 +1,4 @@
-package routes
+package handlers
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pankajy-dev/go-rest-app/models"
+	"github.com/pankajy-dev/go-rest-app/internal/repository"
 )
 
 func registerForEvent(ctx *gin.Context) {
@@ -18,14 +18,14 @@ func registerForEvent(ctx *gin.Context) {
 		return
 	}
 
-	event, err := models.GetEventId(eventId)
+	event, err := repository.GetEventId(eventId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Event could not be retrieved"})
 		return
 	}
 
-	err = event.Register(userId)
+	err = repository.RegisterForEvent(*event, userId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Registration failed."})
@@ -46,14 +46,14 @@ func cancelEventRegistration(ctx *gin.Context) {
 		return
 	}
 
-	event, err := models.GetEventId(eventId)
+	event, err := repository.GetEventId(eventId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Event could not be retrieved"})
 		return
 	}
 
-	err = event.CancelRegistration(userId)
+	err = repository.CancelRegistration(*event, userId)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Registration could not be cancelled."})

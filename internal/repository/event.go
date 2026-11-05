@@ -1,25 +1,13 @@
-package models
+package repository
 
 import (
-	"time"
-
-	"github.com/pankajy-dev/go-rest-app/db"
+	"github.com/pankajy-dev/go-rest-app/internal/db"
+	"github.com/pankajy-dev/go-rest-app/internal/models"
 )
 
-type Event struct {
-	Id          int64
-	Name        string    `binding:"required"`
-	Description string    `binding:"required"`
-	Location    string    `binding:"required"`
-	DateTime    time.Time `binding:"required"`
-	UserId      int64
-}
-
-func (e *Event) Save() error {
-	//later store it in DB
-
+func SaveEvent(e *models.Event) error {
 	query := `
-	INSERT INTO event (name, description, location, dateTime, user_id) 
+	INSERT INTO event (name, description, location, dateTime, user_id)
 	values (?, ?, ?, ?, ?)
 	`
 	// Prepares the query to be executed
@@ -43,7 +31,7 @@ func (e *Event) Save() error {
 	return err
 }
 
-func GetAllEvents() ([]Event, error) {
+func GetAllEvents() ([]models.Event, error) {
 	query := "SELECT * FROM event"
 
 	// Queryb is used when we do select
@@ -52,14 +40,11 @@ func GetAllEvents() ([]Event, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	if err != nil {
-		return nil, err
-	}
 
-	var events []Event
+	var events []models.Event
 
 	for rows.Next() {
-		var event Event
+		var event models.Event
 		// This works like scan of fmt, all the columns need to be specified in same order in which they exist in DB
 		err := rows.Scan(&event.Id, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserId)
 		if err != nil {
@@ -71,13 +56,13 @@ func GetAllEvents() ([]Event, error) {
 	return events, nil
 }
 
-func GetEventId(id int64) (*Event, error) {
+func GetEventId(id int64) (*models.Event, error) {
 	query := `
 		SELECT * FROM event
 		WHERE id = ?
 	`
 
-	var event Event
+	var event models.Event
 
 	row := db.DB.QueryRow(query, id)
 
@@ -89,19 +74,18 @@ func GetEventId(id int64) (*Event, error) {
 	return &event, nil
 }
 
-func (event Event) UpdateEvent() error {
+func UpdateEvent(event models.Event) error {
 	query := `
-		UPDATE event 
+		UPDATE event
 		SET name = ?, description = ?, location = ?, dateTime = ?, user_id = ?
 		WHERE id = ?
 	`
 
 	_, err := db.DB.Exec(query, event.Name, event.Description, event.Location, event.DateTime, event.UserId, event.Id)
 	return err
-
 }
 
-func (event Event) DeleteEvent() error {
+func DeleteEvent(event models.Event) error {
 	query := `
 		DELETE FROM event
 		WHERE id = ?
@@ -111,16 +95,16 @@ func (event Event) DeleteEvent() error {
 	return err
 }
 
-func (e Event) Register(userId int64) error {
+func RegisterForEvent(event models.Event, userId int64) error {
 	query := "INSERT INTO registration (event_id, user_id) VALUES (?, ?)"
 
-	_, err := db.DB.Exec(query, e.Id, userId)
+	_, err := db.DB.Exec(query, event.Id, userId)
 	return err
 }
 
-func (e *Event) CancelRegistration(uid int64) error {
+func CancelRegistration(event models.Event, userId int64) error {
 	query := "DELETE FROM registration WHERE event_id = ? and user_id = ?"
 
-	_, err := db.DB.Exec(query, e.Id, uid)
+	_, err := db.DB.Exec(query, event.Id, userId)
 	return err
 }

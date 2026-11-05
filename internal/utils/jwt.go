@@ -5,9 +5,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/pankajy-dev/go-rest-app/internal/config"
 )
-
-const secretKey = "supersecret"
 
 func GenerateToken(email string, userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -15,7 +14,7 @@ func GenerateToken(email string, userId int64) (string, error) {
 		"user":  userId,
 		"exp":   time.Now().Add(time.Hour * 2).Unix(),
 	})
-	return token.SignedString([]byte(secretKey))
+	return token.SignedString([]byte(config.JWTSecret()))
 }
 
 func VerifyToken(token string) (int64, error) {
@@ -27,7 +26,7 @@ func VerifyToken(token string) (int64, error) {
 		if !ok {
 			return nil, errors.New("unexpected signing method")
 		}
-		return []byte(secretKey), nil
+		return []byte(config.JWTSecret()), nil
 	})
 	if err != nil {
 		return 0, errors.New("could not parse token")
