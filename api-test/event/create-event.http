@@ -7,7 +7,7 @@ Authorization: {{token1}}
     "name": "Gym class",
     "description": "My first gym class",
     "location": "Malleshwaram",
-    "dataTime": "2026-11-04T12:08:00+5:30"
+    "dateTime": "2026-11-04T12:08:00+05:30"
 }
 
 ### Create event by test2 user
@@ -19,5 +19,5 @@ Authorization: {{token2}}
   "name": "Gym class",
   "description": "My first gym class for test2 user",
   "location": "Malleshwaram",
-  "dataTime": "2026-11-04T12:08:00+5:30"
+  "dateTime": "2026-11-04T12:08:00+05:30"
 }

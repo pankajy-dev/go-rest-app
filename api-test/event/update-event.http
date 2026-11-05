@@ -1,11 +1,11 @@
 PUT http://localhost:8080/events/1
 Content-Type: application/json
-Authorization: {{token1}}
+Authorization: {{token2}}
 
 {
   "id": 2,
   "name": "Music class",
   "description": "My first music class",
   "location": "Malleshwaram",
-  "dataTime": "2026-11-04T08:08:00+5:30"
+  "dateTime": "2026-11-04T08:08:00+05:30"
 }

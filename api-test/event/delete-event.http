@@ -1,2 +1,2 @@
 DELETE http://localhost:8080/events/2
-Authorization: {{token2}}
+Authorization: {{token1}}
