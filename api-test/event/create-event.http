@@ -1,7 +1,7 @@
 ### Create event by test1 user
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQG1haWwuY29tIiwiZXhwIjoxNzkzODY2ODEyLCJ1c2VyIjowfQ.akYUncR9poJO9N9FYOULh57uERfDv977WIQvV7kg-E0
+Authorization: {{token1}}
 
 {
     "name": "Gym class",
@@ -13,7 +13,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQG1haWwu
 ### Create event by test2 user
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG1haWwuY29tIiwiZXhwIjoxNzkzODY4ODgyLCJ1c2VyIjoyfQ.k3ntYCOv1fUEA02bmmULkTSXrOAdKrUuFbHWZj06GMc
+Authorization: {{token2}}
 
 {
   "name": "Gym class",
@@ -21,3 +21,6 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG1haWwu
   "location": "Malleshwaram",
   "dataTime": "2026-11-04T12:08:00+5:30"
 }
+
+> {%client
+.global.set("token2", response.body.token);%}

@@ -7,6 +7,8 @@ Content-Type: Application/json
   "password": "test"
 }
 
+> {% client.global.set("token1", response.body.token); %}
+
 ### Login test2 user
 POST http://localhost:8080/login
 Content-Type: Application/json
@@ -15,3 +17,5 @@ Content-Type: Application/json
   "email": "test2@mail.com",
   "password": "test2"
 }
+
+> {% client.global.set("token2", response.body.token); %}
