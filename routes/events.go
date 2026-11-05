@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pankajy-dev/go-rest-app/models"
+	"github.com/pankajy-dev/go-rest-app/utils"
 )
 
 func getEvent(ctx *gin.Context) {
@@ -35,16 +36,21 @@ func getEvents(context *gin.Context) {
 // createEvent handler
 func createEvent(ctx *gin.Context) {
 
-	auth := ctx.Request.Header.Get("Authorization")
+	token := ctx.Request.Header.Get("Authorization")
 
-	if auth == "" {
+	if token == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "No token provided."})
+	}
+
+	err := utils.VerifyToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized"})
 	}
 
 	var event models.Event
 
 	// event will be extracted from the request and fills the pointer just like fmt.Scan
-	err := ctx.ShouldBindJSON(&event)
+	err = ctx.ShouldBindJSON(&event)
 	if err != nil {
 		fmt.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Cannot process request"})
