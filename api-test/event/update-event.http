@@ -1,11 +1,11 @@
 PUT http://localhost:8080/events/1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG1haWwuY29tIiwiZXhwIjoxNzkzODc2NjA3LCJ1c2VyIjoyfQ.vv5R8WpNw2bSnvngutNmpdkkR-rZYZczowgishSBgBs
 
 {
-    "name": "Music class",
-    "description": "My first music class",
-    "location": "Malleshwaram",
-    "dataTime": "2026-11-04T08:08:00+5:30",
-    "userId": 1
-
+  "id": 2,
+  "name": "Music class",
+  "description": "My first music class",
+  "location": "Malleshwaram",
+  "dataTime": "2026-11-04T08:08:00+5:30"
 }
