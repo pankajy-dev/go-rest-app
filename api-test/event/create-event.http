@@ -1,5 +1,6 @@
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQG1haWwuY29tIiwiZXhwIjoxNzkzODY2ODEyLCJ1c2VyIjowfQ.akYUncR9poJO9N9FYOULh57uERfDv977WIQvV7kg-E0
 
 {
     "name": "Gym class",
