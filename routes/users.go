@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,13 +15,14 @@ func signup(ctx *gin.Context) {
 	// event will be extracted from the request and fills the pointer just like fmt.Scan
 	err := ctx.ShouldBindJSON(&usr)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Cannot process request"})
 		return
 	}
 
 	err = usr.Save()
 	if err != nil {
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "User cannot be saved."})
 		return
 	}
@@ -33,6 +34,7 @@ func login(ctx *gin.Context) {
 	var user models.User
 	err := ctx.ShouldBindJSON(&user)
 	if err != nil {
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Bad request."})
 		return
 	}
@@ -44,6 +46,7 @@ func login(ctx *gin.Context) {
 
 	jwtToken, err := utils.GenerateToken(user.Email, user.Id)
 	if err != nil {
+		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "JWT token creation errored."})
 		return
 	}

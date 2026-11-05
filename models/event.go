@@ -8,10 +8,10 @@ import (
 
 type Event struct {
 	Id          int64
-	Name        string    `binding:required`
-	Description string    `binding:required`
-	Location    string    `binding:required`
-	DateTime    time.Time `binding:required`
+	Name        string    `binding:"required"`
+	Description string    `binding:"required"`
+	Location    string    `binding:"required"`
+	DateTime    time.Time `binding:"required"`
 	UserId      int64
 }
 
@@ -26,7 +26,6 @@ func (e *Event) Save() error {
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		panic("Cannot insert record in DB.")
-		return err
 	}
 	defer stmt.Close()
 	// Pass the arguments for each '?'
