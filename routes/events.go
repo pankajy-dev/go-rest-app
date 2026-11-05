@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pankajy-dev/go-rest-app/models"
-	"github.com/pankajy-dev/go-rest-app/utils"
 )
 
 func getEvent(ctx *gin.Context) {
@@ -36,38 +35,34 @@ func getEvents(context *gin.Context) {
 // createEvent handler
 func createEvent(ctx *gin.Context) {
 
-	token := ctx.Request.Header.Get("Authorization")
+	uid, _ := ctx.Get("userId")
 
-	userId, err := utils.VerifyToken(token)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized"})
-		return
-	}
+	userId := uid.(int64)
 
 	if userId == 0 {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "User not found."})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "User not found."})
 		return
 	}
 
 	var event models.Event
 
 	// event will be extracted from the request and fills the pointer just like fmt.Scan
-	err = ctx.ShouldBindJSON(&event)
+	err := ctx.ShouldBindJSON(&event)
 	if err != nil {
 		fmt.Println(err)
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Cannot process request"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Cannot process request"})
 		return
 	}
 
-	event.UserId = userId
+	event.UserId = int64(userId)
 
 	err = event.Save()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create the event."})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Could not create the event."})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "event": event})
+	ctx.AbortWithStatusJSON(http.StatusCreated, gin.H{"message": "New event created", "event": event})
 }
 
 func updateEvent(ctx *gin.Context) {
