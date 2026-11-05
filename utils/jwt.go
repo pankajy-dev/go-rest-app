@@ -18,7 +18,7 @@ func GenerateToken(email string, userId int64) (string, error) {
 	return token.SignedString([]byte(secretKey))
 }
 
-func VerifyToken(token string) error {
+func VerifyToken(token string) (int64, error) {
 	// Using inner anonymous function
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		//Verify the signing method matches with the one we create the token
@@ -30,22 +30,22 @@ func VerifyToken(token string) error {
 		return []byte(secretKey), nil
 	})
 	if err != nil {
-		return errors.New("could not parse token")
+		return 0, errors.New("could not parse token")
 	}
 
 	if !parsedToken.Valid {
-		return errors.New("invalid token")
+		return 0, errors.New("invalid token")
 	}
 
 	//Below is how we access claims map
 
-	//claims, ok := parsedToken.Claims.(jwt.MapClaims)
-	//if !ok {
-	//	return errors.New("invalid token claim")
-	//}
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return 0, errors.New("invalid token claim")
+	}
 
 	//email := claims["email"].(string)
-	//userId := claims["user"].(int64)
+	userId := claims["user"].(int64)
 
-	return nil
+	return userId, nil
 }

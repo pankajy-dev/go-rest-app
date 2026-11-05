@@ -31,7 +31,7 @@ func (user User) Save() error {
 	return err
 }
 
-func (user User) ValidateCredentials() bool {
+func (user *User) ValidateCredentials() bool {
 
 	query := "SELECT id, password FROM user WHERE email = ?"
 

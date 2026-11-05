@@ -38,9 +38,14 @@ func createEvent(ctx *gin.Context) {
 
 	token := ctx.Request.Header.Get("Authorization")
 
-	err := utils.VerifyToken(token)
+	userId, err := utils.VerifyToken(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized"})
+		return
+	}
+
+	if userId == 0 {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "User not found."})
 		return
 	}
 
@@ -54,7 +59,12 @@ func createEvent(ctx *gin.Context) {
 		return
 	}
 
-	event.Save()
+	event.UserId = userId
+
+	err = event.Save()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create the event."})
+	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "event": event})
 }
