@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/pankajy-dev/go-rest-app/utils"
 )
@@ -10,6 +12,8 @@ func Authenticate(ctx *gin.Context) {
 
 	userId, err := utils.VerifyToken(token)
 	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authorized"})
+		return
 	}
 
 	// We can set a value in the context that can be retrieved later.
