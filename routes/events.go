@@ -35,9 +35,7 @@ func getEvents(context *gin.Context) {
 // createEvent handler
 func createEvent(ctx *gin.Context) {
 
-	uid, _ := ctx.Get("userId")
-
-	userId := uid.(int64)
+	userId := ctx.GetInt64("userId")
 
 	if userId == 0 {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "User not found."})
@@ -72,9 +70,16 @@ func updateEvent(ctx *gin.Context) {
 		return
 	}
 
-	_, err = models.GetEventId(eventId)
+	event, err := models.GetEventId(eventId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch."})
+		return
+	}
+
+	userId := ctx.GetInt64("userId")
+
+	if event.UserId != userId {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authorized to delete the event."})
 		return
 	}
 

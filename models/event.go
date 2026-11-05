@@ -111,3 +111,10 @@ func (event Event) DeleteEvent() error {
 	_, err := db.DB.Exec(query, event.Id)
 	return err
 }
+
+func (e Event) Register(userId int64) error {
+	query := "INSERT INTO registration (event_id, user_id) VALUES (?, ?)"
+
+	_, err := db.DB.Exec(query)
+	return err
+}
