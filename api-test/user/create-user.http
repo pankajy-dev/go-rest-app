@@ -1,8 +1,17 @@
-### GET request to example server
+### Create test1 user
 POST http://localhost:8080/signup
 Content-Type: Application/json
 
 {
   "email": "test1@mail.com",
   "password": "test"
+}
+
+### Create test2 user
+POST http://localhost:8080/signup
+Content-Type: Application/json
+
+{
+  "email": "test2@mail.com",
+  "password": "test2"
 }
