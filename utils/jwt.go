@@ -45,7 +45,6 @@ func VerifyToken(token string) (int64, error) {
 	}
 
 	//email := claims["email"].(string)
-	userId := claims["user"].(int64)
-
+	userId := int64(claims["user"].(float64))
 	return userId, nil
 }
