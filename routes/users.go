@@ -23,6 +23,7 @@ func signup(ctx *gin.Context) {
 	err = usr.Save()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "User cannot be saved."})
+		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "user": usr})

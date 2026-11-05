@@ -13,11 +13,11 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQG1haWwu
 ### Create event by test2 user
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG1haWwuY29tIiwiZXhwIjoxNzkzODY4MDExLCJ1c2VyIjowfQ.99kCMocrHf_EvVxK0QDW2TgB7aA_n8mk0ISqQhbpS34
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG1haWwuY29tIiwiZXhwIjoxNzkzODY4ODgyLCJ1c2VyIjoyfQ.k3ntYCOv1fUEA02bmmULkTSXrOAdKrUuFbHWZj06GMc
 
 {
   "name": "Gym class",
-  "description": "My first gym class",
+  "description": "My first gym class for test2 user",
   "location": "Malleshwaram",
   "dataTime": "2026-11-04T12:08:00+5:30"
 }

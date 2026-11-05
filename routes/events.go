@@ -64,6 +64,7 @@ func createEvent(ctx *gin.Context) {
 	err = event.Save()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create the event."})
+		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "New event created", "event": event})
@@ -116,5 +117,6 @@ func deleteEvent(ctx *gin.Context) {
 	err = event.DeleteEvent()
 	if err != nil {
 		ctx.JSON(http.StatusNoContent, gin.H{"message": "Error during record deletion."})
+		return
 	}
 }

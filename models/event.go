@@ -15,7 +15,7 @@ type Event struct {
 	UserId      int64
 }
 
-func (e Event) Save() error {
+func (e *Event) Save() error {
 	//later store it in DB
 
 	query := `
