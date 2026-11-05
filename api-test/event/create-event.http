@@ -21,6 +21,3 @@ Authorization: {{token2}}
   "location": "Malleshwaram",
   "dataTime": "2026-11-04T12:08:00+5:30"
 }
-
-> {%client
-.global.set("token2", response.body.token);%}
